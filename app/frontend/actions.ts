@@ -169,6 +169,7 @@ export default ({setState, getState}: {setState: SetStateFn; getState: GetStateF
       const isDemoWallet = walletSecretDef && walletSecretDef.rootSecret.equals(demoRootSecret)
       const autoLogin = state.autoLogin
       const ticker2Id = null
+      const shouldShowPremiumBanner = state.shouldShowPremiumBanner && walletInfo.balance > 0
       setState({
         walletIsLoaded: true,
         ...walletInfo,
@@ -193,6 +194,7 @@ export default ({setState, getState}: {setState: SetStateFn; getState: GetStateF
         // shelley
         ticker2Id,
         isShelleyCompatible,
+        shouldShowPremiumBanner,
       })
       await fetchConversionRates(conversionRatesPromise)
     } catch (e) {
@@ -1115,6 +1117,13 @@ export default ({setState, getState}: {setState: SetStateFn; getState: GetStateF
     })
   }
 
+  const closePremiumBanner = (state) => {
+    window.localStorage.setItem('dontShowPremiumBanner', 'true')
+    setState({
+      shouldShowPremiumBanner: false,
+    })
+  }
+
   const shouldShowContactFormModal = (state) => {
     setState({
       shouldShowContactFormModal: true,
@@ -1203,5 +1212,6 @@ export default ({setState, getState}: {setState: SetStateFn; getState: GetStateF
     withdrawRewards,
     openInfoModal,
     closeInfoModal,
+    closePremiumBanner,
   }
 }
